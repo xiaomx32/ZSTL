@@ -8,10 +8,8 @@
 #include <initializer_list>
 
 
-namespace zero {
-
 // ref: https://en.cppreference.com/w/cpp/container/array
-namespace zstd {
+namespace zstl {
 
 template <typename _Tp, std::size_t _N>
 class array {
@@ -34,7 +32,7 @@ public:
     array() = default;
 
     array(std::initializer_list<_Tp> v) {
-        std::size_t i { 0 };
+        std::size_t i { 0uz };
         for (const_reference val : v) {
             _M_values[i++] = val;
         }
@@ -50,7 +48,7 @@ public:
     }
 
     constexpr const_reference at(size_type i) const {
-        if (i < 0 || i >= _N) [[__unlikely__]] {
+        if (i < 0uz || i >= _N) [[__unlikely__]] {
             throw std::out_of_range("zero::zstd::array::at");
         }
 
@@ -66,19 +64,19 @@ public:
     }
 
     constexpr reference front() {
-        return _M_values[0];
+        return _M_values[0uz];
     }
 
     constexpr const_reference front() const {
-        return _M_values[0];
+        return _M_values[0uz];
     }
 
     constexpr reference back() {
-        return _M_values[_N - 1];
+        return _M_values[_N - 1uz];
     }
 
     constexpr const_reference back() const {
-        return _M_values[_N - 1];
+        return _M_values[_N - 1uz];
     }
 
     constexpr pointer data() {
@@ -141,19 +139,19 @@ public:
 
     // Operations
     void fill(const_reference v) {
-        for (size_type i = 0; i < _N; ++i) {
+        for (size_type i = 0uz; i < _N; ++i) {
             _M_values[i] = v;
         }
     }
 
     void swap(array &other) noexcept {
-        for (size_type i = 0; i < _N; ++i) {
+        for (size_type i = 0uz; i < _N; ++i) {
             std::swap(_M_values[i], other._M_values[i]);
         }
     }
 
     bool operator==(const array<_Tp, _N> &a) const {
-        for (size_type i = 0; i < _N; ++i) {
+        for (size_type i = 0uz; i < _N; ++i) {
             if (_M_values[i] != a._M_values[i]) {
                 return false;
             }
@@ -191,7 +189,7 @@ auto operator<=>(
 
 // Specialization for zero element arrays (to make MSVC happy)
 template <typename _Tp>
-class array<_Tp, 0> {
+class array<_Tp, 0uz> {
 public:
     using value_type = _Tp;
     using size_type = std::size_t;
@@ -296,11 +294,11 @@ public:
     }
 
     constexpr size_type size() const noexcept {
-        return 0;
+        return 0uz;
     }
 
     constexpr size_type max_size() const noexcept {
-        return 0;
+        return 0uz;
     }
 
     // Operations
@@ -312,11 +310,11 @@ public:
         assert(!"should never be called");
     }
 
-    bool operator==(const array<_Tp, 0> &a) const {
+    bool operator==(const array<_Tp, 0uz> &a) const {
         return true;
     }
 
-    bool operator!=(const array<_Tp, 0> &a) const {
+    bool operator!=(const array<_Tp, 0uz> &a) const {
         return false;
     }
 };
@@ -324,8 +322,6 @@ public:
 // deduction guides for std::array
 // ref: https://en.cppreference.com/w/cpp/container/array/deduction_guides
 template< class T, class... U >
-array(T, U...) -> array<T, 1 + sizeof...(U)>;
+array(T, U...) -> array<T, 1uz + sizeof...(U)>;
 
-} // namespace zstd end
-
-} // namespace zero end
+} // namespace zstl end
