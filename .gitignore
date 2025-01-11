@@ -1,0 +1,9 @@
+# visual studio code
+**/.vscode/
+
+# build
+**/build/
+**/buildDebug/
+**/buildRelease/
+**/build_debug/
+**/build_release/
